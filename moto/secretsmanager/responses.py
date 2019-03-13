@@ -64,3 +64,19 @@ class SecretsManagerResponse(BaseResponse):
             rotation_lambda_arn=rotation_lambda_arn,
             rotation_rules=rotation_rules
         )
+
+    def put_secret_value(self):
+        secret_id = self._get_param('SecretId', if_none='')
+        secret_string = self._get_param('SecretString', if_none='')
+        version_stages = self._get_param('VersionStages', if_none=[])
+        return secretsmanager_backends[self.region].put_secret_value(
+            secret_id=secret_id,
+            secret_string=secret_string,
+            version_stages=version_stages,
+        )
+
+    def list_secret_version_ids(self):
+        secret_id = self._get_param('SecretId', if_none='')
+        return secretsmanager_backends[self.region].list_secret_version_ids(
+            secret_id=secret_id
+        )
